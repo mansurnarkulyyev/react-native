@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import * as Font from "expo-font";
-import AppLoading from "expo";
+import AppLoading from 'expo-app-loading';
+
 
 import {
   StyleSheet,
@@ -24,7 +25,7 @@ const initialState = {
 
 const loadApplication = async () => {
   await Font.loadAsync({
-    Roboto: require("../assets/fonts/Roboto-Bold.ttf"),
+    "Roboto-Bold": require("../assets/fonts/Roboto-Bold.ttf"),
     "Roboto-medium": require("../assets/fonts/Roboto-Medium.ttf"),
   });
 };
@@ -58,11 +59,11 @@ export default function LoginScreen() {
     setState(initialState);
   };
   if (!isReady) {
-    //  return <AppLoading
-    //      startAsync={loadApplication}
-    //   onFinish={() => setIsReady(true)}
-    //     onError={console.warns}
-    // />
+     return <AppLoading
+         startAsync={loadApplication}
+      onFinish={() => setIsReady(true)}
+        onError={console.warns}
+    />
   }
 
   return (
@@ -179,7 +180,7 @@ const styles = StyleSheet.create({
     paddingRight: 16,
   },
   headerTitle: {
-    fontFamily: "Roboto",
+    fontFamily: "Roboto-Bold",
     fontStyle: "normal",
     fontWeight: "500",
     fontSize: 30,
@@ -209,7 +210,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 137,
     right: 32,
-    fontFamily: "Roboto",
+    fontFamily: "Roboto-Bold",
     fontStyle: "normal",
     fontWeight: "400",
     fontSize: 16,
@@ -227,7 +228,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   btnTitle: {
-    fontFamily: "Roboto",
+    fontFamily: "Roboto-Bold",
     fontStyle: "normal",
     fontWeight: "400",
     fontSize: 16,
@@ -236,7 +237,7 @@ const styles = StyleSheet.create({
   },
   linkPath: {
     marginTop: 16,
-    fontFamily: "Roboto",
+    fontFamily: "Roboto-Bold",
     fontStyle: "normal",
     fontWeight: "400",
     fontSize: 16,
