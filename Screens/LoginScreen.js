@@ -1,7 +1,4 @@
 import React, { useState, useEffect } from "react";
-import * as Font from "expo-font";
-import AppLoading from 'expo-app-loading';
-
 
 import {
   StyleSheet,
@@ -15,24 +12,17 @@ import {
   TouchableWithoutFeedback,
   Platform,
   Dimensions,
+  Button,
 } from "react-native";
 
 const initialState = {
-//   name: "",
   email: "",
   password: "",
 };
 
-const loadApplication = async () => {
-  await Font.loadAsync({
-    "Roboto-Bold": require("../assets/fonts/Roboto-Bold.ttf"),
-    "Roboto-medium": require("../assets/fonts/Roboto-Medium.ttf"),
-  });
-};
-
-export default function LoginScreen() {
+export default function LoginScreen({ navigation }) {
+  console.log(navigation);
   const [isShowKeyBoard, setIsShowKeyBoard] = useState(false);
-  const [isReady, setIsReady] = useState(false);
   const [state, setState] = useState(initialState);
   const [emailIsFocus, setEmailIsFocus] = useState("");
   const [passIsFocus, setPassIsFocus] = useState("");
@@ -48,7 +38,7 @@ export default function LoginScreen() {
     };
     Dimensions.addEventListener("change", onChange);
     return () => {
-        Dimensions.removeEventListener("change", onChange);
+        // Dimensions.removeEventListener("change", onChange);
     };
   }, []);
 
@@ -58,14 +48,7 @@ export default function LoginScreen() {
     console.log({ state });
     setState(initialState);
   };
-  if (!isReady) {
-     return <AppLoading
-         startAsync={loadApplication}
-      onFinish={() => setIsReady(true)}
-        onError={console.warns}
-    />
-  }
-
+ 
   return (
     <TouchableWithoutFeedback onPress={keyBoardHide}>
       <View style={styles.container}>
@@ -82,7 +65,6 @@ export default function LoginScreen() {
                 marginBottom: isShowKeyBoard ? -230 : 0,
               }}
             >
-
               <Text style={styles.headerTitle}>Войти</Text>
               <View
                 style={{
@@ -129,12 +111,12 @@ export default function LoginScreen() {
                     }));
                   }}
                 />
-                <Text
+                <TouchableOpacity
                   onPress={() => setSecureTextEntry(!secureTextEntry)}
                   style={styles.showPass}
                 >
-                  Показать
-                </Text>
+                  <Text>Показать</Text>
+                </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.btn}
                   activeOpacity={0.7}
@@ -142,7 +124,14 @@ export default function LoginScreen() {
                 >
                   <Text style={styles.btnTitle}>Войти</Text>
                 </TouchableOpacity>
-                <Text style={styles.linkPath}>Нет аккаунта? Зарегистрироваться</Text>
+
+               <TouchableOpacity style={styles.linkText} onPress={() => navigation.navigate("Register")}>
+                  <Text >Нет аккаунта?{" "}
+                    <Text>
+                     Зарегистрироваться
+                    </Text>
+                  </Text>
+                </TouchableOpacity>
               </View>
             </View>
           </KeyboardAvoidingView>
@@ -235,7 +224,7 @@ const styles = StyleSheet.create({
     lineHeight: "19",
     color: "#FFF",
   },
-  linkPath: {
+  linkText: {
     marginTop: 16,
     fontFamily: "Roboto-Bold",
     fontStyle: "normal",
