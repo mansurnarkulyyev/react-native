@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
-import * as Font from "expo-font";
-import AppLoading from "expo";
+// import * as Font from "expo-font";
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen"
+// import AppLoading from 'expo-app-loading';
 import IconAdd from "../components/icon";
 
 import {
@@ -24,16 +26,16 @@ const initialState = {
   password: "",
 };
 
-const loadApplication = async () => {
-  await Font.loadAsync({
-    Roboto: require("../assets/fonts/Roboto-Bold.ttf"),
-    "Roboto-medium": require("../assets/fonts/Roboto-Medium.ttf"),
-  });
-};
+// const loadApplication = async () => {
+//   await Font.loadAsync({
+//     "Roboto-Bold": require("../assets/fonts/Roboto-Bold.ttf"),
+//     "Roboto-medium": require("../assets/fonts/Roboto-Medium.ttf"),
+//   });
+// };
 
 export default function RegistrationScreen() {
   const [isShowKeyBoard, setIsShowKeyBoard] = useState(false);
-  const [isReady, setIsReady] = useState(false);
+  // const [isReady, setIsReady] = useState(false);
   const [state, setState] = useState(initialState);
   const [nameIsFocus, setNameIsFocus] = useState("");
   const [emailIsFocus, setEmailIsFocus] = useState("");
@@ -43,29 +45,50 @@ export default function RegistrationScreen() {
   );
   const [secureTextEntry, setSecureTextEntry] = useState(true);
 
-  useEffect(() => {
-    const onChange = () => {
+  const [fontsLoaded] = useFonts({
+    "Roboto-Bold": require("../assets/fonts/Roboto-Bold.ttf"),
+    "Roboto-medium": require("../assets/fonts/Roboto-Medium.ttf"),
+  });
+
+useEffect(() => {
+    const onChange = async () => {
       const width = Dimensions.get("window").width - 16 * 2;
       setDimensions(width);
+      await SplashScreen.preventAutoHideAsync()
     };
     Dimensions.addEventListener("change", onChange);
     return () => {
-        Dimensions.removeEventListener("change", onChange);
+        // Dimensions.removeEventListener("change", onChange);
+      onChange()
     };
-  }, []);
-
-  const keyBoardHide = () => {
+}, []);
+  
+   const keyBoardHide = () => {
     setIsShowKeyBoard(false);
     Keyboard.dismiss();
     console.log({ state });
     setState(initialState);
   };
-  if (!isReady) {
-    //  return <AppLoading
-    //      startAsync={loadApplication}
-    //   onFinish={() => setIsReady(true)}
-    //     onError={console.warns}
-    // />
+  
+  // useEffect(() => {
+  //   async function prepare() {
+  //     await SplashScreen.preventAutoHideAsync()
+  //   }
+  //   prepare();
+  // }, []);
+
+ 
+  // if (!isReady) {
+  //    return <AppLoading
+  //        startAsync={loadApplication}
+  //     onFinish={() => setIsReady(true)}
+  //       onError={console.warns}
+  //   />
+  // }
+  if (!fontsLoaded) {
+    return undefined;
+  } else {
+    SplashScreen.hideAsync();
   }
 
   return (
@@ -222,7 +245,7 @@ const styles = StyleSheet.create({
     paddingRight: 16,
   },
   headerTitle: {
-    fontFamily: "Roboto",
+    fontFamily: "Roboto-Bold",
     fontStyle: "normal",
     fontWeight: "500",
     fontSize: 30,
@@ -252,7 +275,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 137,
     right: 32,
-    fontFamily: "Roboto",
+    fontFamily: "Roboto-medium",
     fontStyle: "normal",
     fontWeight: "400",
     fontSize: 16,
@@ -270,7 +293,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   btnTitle: {
-    fontFamily: "Roboto",
+    fontFamily: "Roboto-Bold",
     fontStyle: "normal",
     fontWeight: "400",
     fontSize: 16,
@@ -279,7 +302,7 @@ const styles = StyleSheet.create({
   },
   linkPath: {
     marginTop: 16,
-    fontFamily: "Roboto",
+    fontFamily: "Roboto-Bold",
     fontStyle: "normal",
     fontWeight: "400",
     fontSize: 16,
