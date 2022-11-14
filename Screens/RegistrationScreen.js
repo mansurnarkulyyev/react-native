@@ -1,8 +1,4 @@
 import React, { useState, useEffect } from "react";
-// import * as Font from "expo-font";
-import { useFonts } from "expo-font";
-import * as SplashScreen from "expo-splash-screen"
-// import AppLoading from 'expo-app-loading';
 import IconAdd from "../components/icon";
 
 import {
@@ -18,6 +14,7 @@ import {
   TouchableWithoutFeedback,
   Platform,
   Dimensions,
+  Button,
 } from "react-native";
 
 const initialState = {
@@ -26,16 +23,9 @@ const initialState = {
   password: "",
 };
 
-// const loadApplication = async () => {
-//   await Font.loadAsync({
-//     "Roboto-Bold": require("../assets/fonts/Roboto-Bold.ttf"),
-//     "Roboto-medium": require("../assets/fonts/Roboto-Medium.ttf"),
-//   });
-// };
 
-export default function RegistrationScreen() {
+export default function RegistrationScreen({navigation}) {
   const [isShowKeyBoard, setIsShowKeyBoard] = useState(false);
-  // const [isReady, setIsReady] = useState(false);
   const [state, setState] = useState(initialState);
   const [nameIsFocus, setNameIsFocus] = useState("");
   const [emailIsFocus, setEmailIsFocus] = useState("");
@@ -45,21 +35,14 @@ export default function RegistrationScreen() {
   );
   const [secureTextEntry, setSecureTextEntry] = useState(true);
 
-  const [fontsLoaded] = useFonts({
-    "Roboto-Bold": require("../assets/fonts/Roboto-Bold.ttf"),
-    "Roboto-medium": require("../assets/fonts/Roboto-Medium.ttf"),
-  });
-
 useEffect(() => {
-    const onChange = async () => {
+    const onChange = () => {
       const width = Dimensions.get("window").width - 16 * 2;
       setDimensions(width);
-      await SplashScreen.preventAutoHideAsync()
     };
     Dimensions.addEventListener("change", onChange);
     return () => {
         // Dimensions.removeEventListener("change", onChange);
-      onChange()
     };
 }, []);
   
@@ -70,26 +53,6 @@ useEffect(() => {
     setState(initialState);
   };
   
-  // useEffect(() => {
-  //   async function prepare() {
-  //     await SplashScreen.preventAutoHideAsync()
-  //   }
-  //   prepare();
-  // }, []);
-
- 
-  // if (!isReady) {
-  //    return <AppLoading
-  //        startAsync={loadApplication}
-  //     onFinish={() => setIsReady(true)}
-  //       onError={console.warns}
-  //   />
-  // }
-  if (!fontsLoaded) {
-    return undefined;
-  } else {
-    SplashScreen.hideAsync();
-  }
 
   return (
     <TouchableWithoutFeedback onPress={keyBoardHide}>
@@ -176,12 +139,12 @@ useEffect(() => {
                     }));
                   }}
                 />
-                <Text
+                <TouchableOpacity
                   onPress={() => setSecureTextEntry(!secureTextEntry)}
                   style={styles.showPass}
                 >
-                  Показать
-                </Text>
+                  <Text>Показать</Text>
+                </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.btn}
                   activeOpacity={0.7}
@@ -189,7 +152,15 @@ useEffect(() => {
                 >
                   <Text style={styles.btnTitle}>Зарегистрироваться</Text>
                 </TouchableOpacity>
-                <Text style={styles.linkPath}>Уже есть аккаунт? Войти</Text>
+
+                <TouchableOpacity style={styles.linkText} onPress={() => navigation.navigate("Login")}>
+                  <Text >Уже есть аккаунт?{" "}
+                    <Text>
+                      Войти
+                    </Text>
+                  </Text>
+                </TouchableOpacity>
+
               </View>
             </View>
           </KeyboardAvoidingView>
@@ -300,7 +271,7 @@ const styles = StyleSheet.create({
     lineHeight: "19",
     color: "#FFF",
   },
-  linkPath: {
+  linkText: {
     marginTop: 16,
     fontFamily: "Roboto-Bold",
     fontStyle: "normal",
@@ -309,4 +280,5 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     color: "#1B4371",
   },
+
 });
