@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
+import IconButton from "../../components/Icon";
+
 
 import {
   StyleSheet,
   View,
   ImageBackground,
+  Image,
   Keyboard,
   KeyboardAvoidingView,
   Text,
@@ -12,18 +15,19 @@ import {
   TouchableWithoutFeedback,
   Platform,
   Dimensions,
-  Button,
 } from "react-native";
 
 const initialState = {
+  name: "",
   email: "",
   password: "",
 };
 
-export default function LoginScreen({ navigation }) {
-  console.log(navigation);
+
+export default function RegistrationScreen({navigation}) {
   const [isShowKeyBoard, setIsShowKeyBoard] = useState(false);
   const [state, setState] = useState(initialState);
+  const [nameIsFocus, setNameIsFocus] = useState("");
   const [emailIsFocus, setEmailIsFocus] = useState("");
   const [passIsFocus, setPassIsFocus] = useState("");
   const [dimensions, setDimensions] = useState(
@@ -31,7 +35,7 @@ export default function LoginScreen({ navigation }) {
   );
   const [secureTextEntry, setSecureTextEntry] = useState(true);
 
-  useEffect(() => {
+useEffect(() => {
     const onChange = () => {
       const width = Dimensions.get("window").width - 16 * 2;
       setDimensions(width);
@@ -40,21 +44,22 @@ export default function LoginScreen({ navigation }) {
     return () => {
         // Dimensions.removeEventListener("change", onChange);
     };
-  }, []);
-
-  const keyBoardHide = () => {
+}, []);
+  
+   const keyBoardHide = () => {
     setIsShowKeyBoard(false);
     Keyboard.dismiss();
     console.log({ state });
     setState(initialState);
   };
- 
+  
+
   return (
     <TouchableWithoutFeedback onPress={keyBoardHide}>
       <View style={styles.container}>
         <ImageBackground
           style={styles.bgImage}
-          source={require("../assets/image/PhotoBG.jpeg")}
+          source={require("../../assets/image/PhotoBG.jpeg")}
         >
           <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -65,7 +70,14 @@ export default function LoginScreen({ navigation }) {
                 marginBottom: isShowKeyBoard ? -230 : 0,
               }}
             >
-              <Text style={styles.headerTitle}>Войти</Text>
+              <View style={styles.header}>
+                <Image />
+                <View style={styles.headerImg}>
+                  <IconButton type="add"  />
+                </View>
+              </View>
+
+              <Text style={styles.headerTitle}>Регистрация</Text>
               <View
                 style={{
                   width: dimensions,
@@ -73,6 +85,22 @@ export default function LoginScreen({ navigation }) {
                   position: "relative",
                 }}
               >
+                <TextInput
+                  style={{
+                    ...styles.input,
+                    ...nameIsFocus,
+                  }}
+                  placeholder="Логин"
+                  activeUnderlineColor="orange"
+                  value={state.name}
+                  onFocus={() => {
+                    setIsShowKeyBoard(true);
+                    setNameIsFocus(styles.isFocused);
+                  }}
+                  onChangeText={(value) => {
+                    setState((prevState) => ({ ...prevState, name: value }));
+                  }}
+                />
                 <TextInput
                   style={{
                     ...styles.input,
@@ -122,16 +150,17 @@ export default function LoginScreen({ navigation }) {
                   activeOpacity={0.7}
                   onPress={keyBoardHide}
                 >
-                  <Text style={styles.btnTitle}>Войти</Text>
+                  <Text style={styles.btnTitle}>Зарегистрироваться</Text>
                 </TouchableOpacity>
 
-               <TouchableOpacity style={styles.linkText} onPress={() => navigation.navigate("Register")}>
-                  <Text >Нет аккаунта?{" "}
+                <TouchableOpacity style={styles.linkText} onPress={() => navigation.navigate("Login")}>
+                  <Text >Уже есть аккаунт?{" "}
                     <Text>
-                     Зарегистрироваться
+                      Войти
                     </Text>
                   </Text>
                 </TouchableOpacity>
+
               </View>
             </View>
           </KeyboardAvoidingView>
@@ -153,10 +182,25 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-end",
   },
-  icon: {
-    width: 25,
-    height: 25,
+  header: {
+    position: "absolute",
+    top: -60,
+    backgroundColor: "#F6F6F6",
+    borderRadius: 16,
+    width: 120,
+    height: 120,
   },
+  headerImg: {
+    borderWidth: 1,
+    backgroundColor: "#FFF",
+    padding: 6,
+    borderColor: "#FF6C00",
+    borderRadius: 100,
+    position: "absolute",
+    right: -10,
+    bottom: 13,
+  },
+  
   form: {
     position: "relative",
     alignItems: "center",
@@ -199,7 +243,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 137,
     right: 32,
-    fontFamily: "Roboto-Bold",
+    fontFamily: "Roboto-medium",
     fontStyle: "normal",
     fontWeight: "400",
     fontSize: 16,
@@ -233,4 +277,5 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     color: "#1B4371",
   },
+
 });
