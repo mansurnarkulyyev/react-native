@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
-import IconAdd from "../components/icon";
 
 import {
   StyleSheet,
   View,
   ImageBackground,
-  Image,
   Keyboard,
   KeyboardAvoidingView,
   Text,
@@ -18,16 +16,14 @@ import {
 } from "react-native";
 
 const initialState = {
-  name: "",
   email: "",
   password: "",
 };
 
-
-export default function RegistrationScreen({navigation}) {
+export default function LoginScreen({ navigation }) {
+  console.log(navigation);
   const [isShowKeyBoard, setIsShowKeyBoard] = useState(false);
   const [state, setState] = useState(initialState);
-  const [nameIsFocus, setNameIsFocus] = useState("");
   const [emailIsFocus, setEmailIsFocus] = useState("");
   const [passIsFocus, setPassIsFocus] = useState("");
   const [dimensions, setDimensions] = useState(
@@ -35,7 +31,7 @@ export default function RegistrationScreen({navigation}) {
   );
   const [secureTextEntry, setSecureTextEntry] = useState(true);
 
-useEffect(() => {
+  useEffect(() => {
     const onChange = () => {
       const width = Dimensions.get("window").width - 16 * 2;
       setDimensions(width);
@@ -44,22 +40,21 @@ useEffect(() => {
     return () => {
         // Dimensions.removeEventListener("change", onChange);
     };
-}, []);
-  
-   const keyBoardHide = () => {
+  }, []);
+
+  const keyBoardHide = () => {
     setIsShowKeyBoard(false);
     Keyboard.dismiss();
     console.log({ state });
     setState(initialState);
   };
-  
-
+ 
   return (
     <TouchableWithoutFeedback onPress={keyBoardHide}>
       <View style={styles.container}>
         <ImageBackground
           style={styles.bgImage}
-          source={require("../assets/image/PhotoBG.jpeg")}
+          source={require("../../assets/image/PhotoBG.jpeg")}
         >
           <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -70,14 +65,7 @@ useEffect(() => {
                 marginBottom: isShowKeyBoard ? -230 : 0,
               }}
             >
-              <View style={styles.header}>
-                <Image />
-                <View style={styles.headerImg}>
-                  <IconAdd type="add" />
-                </View>
-              </View>
-
-              <Text style={styles.headerTitle}>Регистрация</Text>
+              <Text style={styles.headerTitle}>Войти</Text>
               <View
                 style={{
                   width: dimensions,
@@ -85,22 +73,6 @@ useEffect(() => {
                   position: "relative",
                 }}
               >
-                <TextInput
-                  style={{
-                    ...styles.input,
-                    ...nameIsFocus,
-                  }}
-                  placeholder="Логин"
-                  activeUnderlineColor="orange"
-                  value={state.name}
-                  onFocus={() => {
-                    setIsShowKeyBoard(true);
-                    setNameIsFocus(styles.isFocused);
-                  }}
-                  onChangeText={(value) => {
-                    setState((prevState) => ({ ...prevState, name: value }));
-                  }}
-                />
                 <TextInput
                   style={{
                     ...styles.input,
@@ -150,17 +122,16 @@ useEffect(() => {
                   activeOpacity={0.7}
                   onPress={keyBoardHide}
                 >
-                  <Text style={styles.btnTitle}>Зарегистрироваться</Text>
+                  <Text style={styles.btnTitle}>Войти</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.linkText} onPress={() => navigation.navigate("Login")}>
-                  <Text >Уже есть аккаунт?{" "}
+               <TouchableOpacity style={styles.linkText} onPress={() => navigation.navigate("Register")}>
+                  <Text >Нет аккаунта?{" "}
                     <Text>
-                      Войти
+                     Зарегистрироваться
                     </Text>
                   </Text>
                 </TouchableOpacity>
-
               </View>
             </View>
           </KeyboardAvoidingView>
@@ -181,24 +152,6 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     alignItems: "center",
     justifyContent: "flex-end",
-  },
-  header: {
-    position: "absolute",
-    top: -60,
-    backgroundColor: "#F6F6F6",
-    borderRadius: 16,
-    width: 120,
-    height: 120,
-  },
-  headerImg: {
-    borderWidth: 1,
-    backgroundColor: "#FFF",
-    padding: 6,
-    borderColor: "#FF6C00",
-    borderRadius: 100,
-    position: "absolute",
-    right: -10,
-    bottom: 13,
   },
   icon: {
     width: 25,
@@ -246,7 +199,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 137,
     right: 32,
-    fontFamily: "Roboto-medium",
+    fontFamily: "Roboto-Bold",
     fontStyle: "normal",
     fontWeight: "400",
     fontSize: 16,
@@ -280,5 +233,4 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     color: "#1B4371",
   },
-
 });
