@@ -17,8 +17,11 @@ import {
   Dimensions,
 } from "react-native";
 
+import { useDispatch } from "react-redux";
+import { authSignUpUser } from "../../redux/auth/authOperation";
+
 const initialState = {
-  name: "",
+  userName: "",
   email: "",
   password: "",
 };
@@ -26,10 +29,11 @@ const initialState = {
 
 export default function RegistrationScreen({navigation}) {
   const [isShowKeyBoard, setIsShowKeyBoard] = useState(false);
-  const [state, setState] = useState(initialState);
+  const [state, setState] = useState("");
   const [nameIsFocus, setNameIsFocus] = useState("");
   const [emailIsFocus, setEmailIsFocus] = useState("");
   const [passIsFocus, setPassIsFocus] = useState("");
+  const dispatch = useDispatch();
   const [dimensions, setDimensions] = useState(
     Dimensions.get("window").width - 16 * 2
   );
@@ -46,16 +50,17 @@ useEffect(() => {
     };
 }, []);
   
-   const keyBoardHide = () => {
+   const handleSubmit = () => {
     setIsShowKeyBoard(false);
     Keyboard.dismiss();
-    console.log({ state });
+     console.log({ state });
+     dispatch(authSignUpUser(state))
     setState(initialState);
   };
   
 
   return (
-    <TouchableWithoutFeedback onPress={keyBoardHide}>
+    <TouchableWithoutFeedback onPress={handleSubmit}>
       <View style={styles.container}>
         <ImageBackground
           style={styles.bgImage}
@@ -92,13 +97,13 @@ useEffect(() => {
                   }}
                   placeholder="Логин"
                   activeUnderlineColor="orange"
-                  value={state.name}
+                  value={state.userName}
                   onFocus={() => {
                     setIsShowKeyBoard(true);
                     setNameIsFocus(styles.isFocused);
                   }}
                   onChangeText={(value) => {
-                    setState((prevState) => ({ ...prevState, name: value }));
+                    setState((prevState) => ({ ...prevState, userName: value }));
                   }}
                 />
                 <TextInput
@@ -148,7 +153,7 @@ useEffect(() => {
                 <TouchableOpacity
                   style={styles.btn}
                   activeOpacity={0.7}
-                  onPress={keyBoardHide}
+                  onPress={handleSubmit}
                 >
                   <Text style={styles.btnTitle}>Зарегистрироваться</Text>
                 </TouchableOpacity>
@@ -259,8 +264,21 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     justifyContent: "center",
     alignItems: "center",
+  //    ...Platform.select({
+  //     ios: {
+  //       backgroundColor: "transparent",
+  //       borderColor: "#f0f8ff",
+  //     },
+  //     android: {
+  //       backgroundColor: "#4169e1",
+  //       borderColor: "transparent",
+  //     },
+  //   }),
+ 
   },
   btnTitle: {
+    // color: Platform.OS === "ios" ? "#4169e1" : "#f0f8ff",
+
     fontFamily: "Roboto-Bold",
     fontStyle: "normal",
     fontWeight: "400",

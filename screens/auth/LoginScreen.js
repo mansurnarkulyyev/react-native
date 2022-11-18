@@ -12,7 +12,7 @@ import {
   TouchableWithoutFeedback,
   Platform,
   Dimensions,
-  Button,
+  // Button,
 } from "react-native";
 
 const initialState = {
@@ -21,7 +21,7 @@ const initialState = {
 };
 
 export default function LoginScreen({ navigation }) {
-  console.log(navigation);
+  // console.log(navigation);
   const [isShowKeyBoard, setIsShowKeyBoard] = useState(false);
   const [state, setState] = useState(initialState);
   const [emailIsFocus, setEmailIsFocus] = useState("");
@@ -42,7 +42,7 @@ export default function LoginScreen({ navigation }) {
     };
   }, []);
 
-  const keyBoardHide = () => {
+  const handleSubmit = () => {
     setIsShowKeyBoard(false);
     Keyboard.dismiss();
     console.log({ state });
@@ -50,7 +50,7 @@ export default function LoginScreen({ navigation }) {
   };
  
   return (
-    <TouchableWithoutFeedback onPress={keyBoardHide}>
+    <TouchableWithoutFeedback onPress={handleSubmit}>
       <View style={styles.container}>
         <ImageBackground
           style={styles.bgImage}
@@ -120,7 +120,7 @@ export default function LoginScreen({ navigation }) {
                 <TouchableOpacity
                   style={styles.btn}
                   activeOpacity={0.7}
-                  onPress={keyBoardHide}
+                  onPress={handleSubmit}
                 >
                   <Text style={styles.btnTitle}>Войти</Text>
                 </TouchableOpacity>
