@@ -12,8 +12,10 @@ import {
   TouchableWithoutFeedback,
   Platform,
   Dimensions,
-  Button,
+  // Button,
 } from "react-native";
+import { useDispatch } from "react-redux";
+import { authSignInUser } from "../../redux/auth/authOperation";
 
 const initialState = {
   email: "",
@@ -21,7 +23,7 @@ const initialState = {
 };
 
 export default function LoginScreen({ navigation }) {
-  console.log(navigation);
+  // console.log(navigation);
   const [isShowKeyBoard, setIsShowKeyBoard] = useState(false);
   const [state, setState] = useState(initialState);
   const [emailIsFocus, setEmailIsFocus] = useState("");
@@ -30,6 +32,8 @@ export default function LoginScreen({ navigation }) {
     Dimensions.get("window").width - 16 * 2
   );
   const [secureTextEntry, setSecureTextEntry] = useState(true);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const onChange = () => {
@@ -42,13 +46,20 @@ export default function LoginScreen({ navigation }) {
     };
   }, []);
 
-  const keyBoardHide = () => {
+  const handleSubmit = () => {
     setIsShowKeyBoard(false);
     Keyboard.dismiss();
-    console.log({ state });
+    // console.log("submit", { state });
+    dispatch(authSignInUser(state))
     setState(initialState);
   };
  
+  const keyBoardHide = () => {
+    Keyboard.dismiss();
+    setIsShowKeyBoard(false);
+    
+  }
+
   return (
     <TouchableWithoutFeedback onPress={keyBoardHide}>
       <View style={styles.container}>
@@ -120,7 +131,7 @@ export default function LoginScreen({ navigation }) {
                 <TouchableOpacity
                   style={styles.btn}
                   activeOpacity={0.7}
-                  onPress={keyBoardHide}
+                  onPress={handleSubmit}
                 >
                   <Text style={styles.btnTitle}>Войти</Text>
                 </TouchableOpacity>
