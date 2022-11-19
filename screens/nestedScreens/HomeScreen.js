@@ -32,12 +32,14 @@ export default function HomeScreen({ route,navigation }) {
               <Image source={{ uri: item.photo }}
               style={styles.image}
               />
+              <Text>{item}</Text>
             </View>
           )}
         />
       </View>
       <Button title="Go to map" onPress={()=> navigation.navigate("Map")}/>
       <Button title="Go to Comments" onPress={()=> navigation.navigate("Comments")}/>
+     
     </View>
   ); 
 }

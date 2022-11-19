@@ -24,6 +24,7 @@ const initialState = {
   userName: "",
   email: "",
   password: "",
+  // photoURL:"",
 };
 
 

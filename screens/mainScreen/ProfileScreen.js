@@ -1,23 +1,32 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { useDispatch } from "react-redux";
 import IconButton from "../../components/Icon";
+import { authSignOutUser } from "../../redux/auth/authOperation";
 
 // import { Camera, CameraType } from 'expo-camera';
 
 export default function ProfileScreen() {
+  const dispatch = useDispatch();
+
+  const signOut = () => {
+    dispatch(authSignOutUser());
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.innerBox}>
         <View style={styles.innerBoxTextWrap}>
           <Text style={styles.innerBoxText}>Создать публикацию</Text>
         </View>
-        <View style={{ marginTop: 10 }}>
-          <IconButton type="log-out" />
-        </View>
+        <TouchableOpacity onPress={signOut} style={{ marginTop: 10 }}>
+          <IconButton type="log-out" onPress={signOut}/>
+        </TouchableOpacity>
       </View>
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         
-      <Text>Profile Screen</Text>
+      <Text >Profile Screen</Text>
             </View>
     </View>
   );

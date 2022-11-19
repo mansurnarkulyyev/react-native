@@ -20,7 +20,7 @@ import { Feather } from '@expo/vector-icons';
 import { View,StyleSheet } from "react-native";
 
 
-export default function useRoute(isAuth) {
+export default function useRoute(isAuth,navigation) {
   if (!isAuth) {
     return (
        <AuthStack.Navigator >

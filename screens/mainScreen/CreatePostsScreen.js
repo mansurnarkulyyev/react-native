@@ -21,14 +21,17 @@ export default function CreatePostsScreen({navigation}) {
   const takePhoto = async () => { 
     const photo = await camera.takePictureAsync();
     const location = await Location.getCurrentPositionAsync();
-    console.log("location",location); 
+    console.log("location",location.coords.latitude); 
+    console.log("longitude",location.coords.longitude); 
     setPhoto(photo.uri);
     // console.log(photo);
   };
 
   const sendPhoto = () => { 
     // console.log("navigation", navigation);
-    navigation.navigate("Home",{photo});
+    navigation.navigate("Home", { photo },state.name , state.locality);
+     console.log(state.name , state.locality);
+    setState(initialState);
   };
 
 
@@ -45,7 +48,8 @@ export default function CreatePostsScreen({navigation}) {
       <View style={styles.createPostsContainer}>
  <Camera style={styles.camera} ref={setCamera}>
         {photo && ( <View style={styles.takePhotoContainer}>
-          <Image source={{ uri: photo }} style={styles.imageContainer} />
+            <Image source={{ uri: photo }} style={styles.imageContainer} />
+            
          </View>)}
          <TouchableOpacity onPress={takePhoto} style={styles.snapContainer}>
             <IconButton type="camera" />
