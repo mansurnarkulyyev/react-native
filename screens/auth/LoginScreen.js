@@ -12,7 +12,6 @@ import {
   TouchableWithoutFeedback,
   Platform,
   Dimensions,
-  // Button,
 } from "react-native";
 import { useDispatch } from "react-redux";
 import { authSignInUser } from "../../redux/auth/authOperation";
@@ -42,24 +41,21 @@ export default function LoginScreen({ navigation }) {
     };
     Dimensions.addEventListener("change", onChange);
     return () => {
-        // Dimensions.removeEventListener("change", onChange);
+      // Dimensions.removeEventListener("change", onChange);
     };
   }, []);
 
   const handleSubmit = () => {
     setIsShowKeyBoard(false);
     Keyboard.dismiss();
-    // console.log("submit", { state });
-    dispatch(authSignInUser(state))
+    dispatch(authSignInUser(state));
     setState(initialState);
   };
- 
+
   const keyBoardHide = () => {
     Keyboard.dismiss();
     setIsShowKeyBoard(false);
-    
-  }
-
+  };
   return (
     <TouchableWithoutFeedback onPress={keyBoardHide}>
       <View style={styles.container}>
@@ -136,11 +132,12 @@ export default function LoginScreen({ navigation }) {
                   <Text style={styles.btnTitle}>Войти</Text>
                 </TouchableOpacity>
 
-               <TouchableOpacity style={styles.linkText} onPress={() => navigation.navigate("Register")}>
-                  <Text >Нет аккаунта?{" "}
-                    <Text>
-                     Зарегистрироваться
-                    </Text>
+                <TouchableOpacity
+                  style={styles.linkText}
+                  onPress={() => navigation.navigate("Register")}
+                >
+                  <Text>
+                    Нет аккаунта? <Text>Зарегистрироваться</Text>
                   </Text>
                 </TouchableOpacity>
               </View>
