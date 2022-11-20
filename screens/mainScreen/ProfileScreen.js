@@ -60,7 +60,7 @@ export default function ProfileScreen() {
                 <IconButton type="log-out" onPress={signOut} />
               </TouchableOpacity>
               <View style={styles.innerBoxTextWrap}>
-                <Text style={styles.innerBoxText}>Profile</Text>
+                <Text style={styles.innerBoxText}>User Name</Text>
               </View>
               <View>
                 <FlatList
