@@ -47,8 +47,8 @@ export default function CommentsScreen({ route }) {
         <FlatList
           data={allComments}
           renderItem={({ item }) => (
-            <View>
-              <Text>{item.nickName}</Text>
+           <View style={styles.comment}>
+              <Text style={{marginBottom:10}}>{item.userName}</Text>
               <Text>{item.comment}</Text>
             </View>
           )}
@@ -83,6 +83,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginHorizontal: 10,
+  },
+  comment: {
+    borderRadius: 8,
+    borderWidth: 1,
+    padding: 30,
+    marginTop: 10
   },
   btn: {
     marginTop: 40,
