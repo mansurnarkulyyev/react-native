@@ -1,47 +1,79 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, FlatList,Image, Button } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Image,
+  Button,
+  TouchableOpacity,
+} from "react-native";
+import { useDispatch } from "react-redux";
 import IconButton from "../../components/Icon";
+import db from "../../firebase/config";
+import { authSignOutUser } from "../../redux/auth/authOperation";
 
-export default function HomeScreen({ route,navigation }) {
-  
+export default function HomeScreen({ route, navigation }) {
+  const dispatch = useDispatch();
 
   const [posts, setPosts] = useState([]);
-  // console.log("route.params", route.params);
-  
+
+  const getAllPost = async () => {
+    await db
+      .firestore()
+      .collection("posts")
+      .onSnapshot((data) =>
+        setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+      );
+  };
+
   useEffect(() => {
-    if (route.params) {
-      setPosts((prevState) => [...prevState, route.params]);
-    }
-  }, [route.params]);
-//  console.log(posts);
+    getAllPost();
+  }, []);
+
+  const signOut = () => {
+    dispatch(authSignOutUser());
+    console.log(authSignOutUser());
+  };
   return (
     <View style={styles.container}>
       <View style={styles.innerBox}>
         <View style={styles.innerBoxTextWrap}>
           <Text style={styles.innerBoxText}>Публикации</Text>
         </View>
-        <View style={{ marginTop: 10 }}>
-          <IconButton type="log-out" />
-        </View>
+        <TouchableOpacity style={{ marginTop: 10 }}>
+          <IconButton type="log-out" onPress={signOut} />
+        </TouchableOpacity>
       </View>
 
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <FlatList data={posts} keyExtractor={(item, index) => index.toString()}
+        <FlatList
+          data={posts}
+          keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
             <View style={styles.postContainer}>
-              <Image source={{ uri: item.photo }}
-              style={styles.image}
+              <Image source={{ uri: item.photo }} style={styles.image} />
+              <View>
+                <Text>{item.comment}</Text>
+              </View>
+              <Button
+                title="Go to map"
+                onPress={() =>
+                  navigation.navigate("Map", { location: item.location })
+                }
               />
-              <Text>{item}</Text>
+              <Button
+                title="Go to Comments"
+                onPress={() =>
+                  navigation.navigate("Comments", { postId: item.id })
+                }
+              />
             </View>
           )}
         />
       </View>
-      <Button title="Go to map" onPress={()=> navigation.navigate("Map")}/>
-      <Button title="Go to Comments" onPress={()=> navigation.navigate("Comments")}/>
-     
     </View>
-  ); 
+  );
 }
 
 const styles = StyleSheet.create({
@@ -53,12 +85,11 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     justifyContent: "center",
     alignItems: "center",
-    // marginHorizontal:10
   },
   image: {
     width: 375,
     height: 200,
-    borderRadius:8
+    borderRadius: 8,
   },
   innerBox: {
     flexDirection: "row",
@@ -83,22 +114,3 @@ const styles = StyleSheet.create({
     paddingLeft: 30,
   },
 });
-
-
-// import React from "react";
-// import { View, Text, StyleSheet } from "react-native";
-// export default function HomeScreen({navigation}) {
-//   return (
-//     <View style={styles.container}>
-//       <Text>Home Screen</Text>
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     alignItems: "center",
-//     justifyContent: "center",
-//   },
-// });

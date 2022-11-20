@@ -7,11 +7,8 @@ const MainTab = createBottomTabNavigator();
 
 import LoginScreen from './screens/auth/LoginScreen';
 import RegistrationScreen from './screens/auth/RegistrationScreen';
-// import HomeScreen from './screens/nestedScreens/HomeScreen';
 import ProfileScreen from './screens/mainScreen/ProfileScreen';
-// import MapScreen from './screens/nestedScreens/MapScreen';
 import PostsScreen from "./screens/mainScreen/PostsScreen";
-// import CommentsScreen from './screens/nestedScreens/CommentsScreen';
 import CreatePostsScreen from './screens/mainScreen/CreatePostsScreen';
 
 import { Ionicons } from '@expo/vector-icons';

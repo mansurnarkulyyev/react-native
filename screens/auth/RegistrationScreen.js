@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import IconButton from "../../components/Icon";
 
-
 import {
   StyleSheet,
   View,
@@ -27,8 +26,7 @@ const initialState = {
   // photoURL:"",
 };
 
-
-export default function RegistrationScreen({navigation}) {
+export default function RegistrationScreen({ navigation }) {
   const [isShowKeyBoard, setIsShowKeyBoard] = useState(false);
   const [state, setState] = useState("");
   const [nameIsFocus, setNameIsFocus] = useState("");
@@ -40,25 +38,24 @@ export default function RegistrationScreen({navigation}) {
   );
   const [secureTextEntry, setSecureTextEntry] = useState(true);
 
-useEffect(() => {
+  useEffect(() => {
     const onChange = () => {
       const width = Dimensions.get("window").width - 16 * 2;
       setDimensions(width);
     };
     Dimensions.addEventListener("change", onChange);
     return () => {
-        // Dimensions.removeEventListener("change", onChange);
+      // Dimensions.removeEventListener("change", onChange);
     };
-}, []);
-  
-   const handleSubmit = () => {
+  }, []);
+
+  const handleSubmit = () => {
     setIsShowKeyBoard(false);
     Keyboard.dismiss();
-     console.log({ state });
-     dispatch(authSignUpUser(state))
+    console.log({ state });
+    dispatch(authSignUpUser(state));
     setState(initialState);
   };
-  
 
   return (
     <TouchableWithoutFeedback onPress={handleSubmit}>
@@ -79,7 +76,7 @@ useEffect(() => {
               <View style={styles.header}>
                 <Image />
                 <View style={styles.headerImg}>
-                  <IconButton type="add"  />
+                  <IconButton type="add" />
                 </View>
               </View>
 
@@ -104,7 +101,10 @@ useEffect(() => {
                     setNameIsFocus(styles.isFocused);
                   }}
                   onChangeText={(value) => {
-                    setState((prevState) => ({ ...prevState, userName: value }));
+                    setState((prevState) => ({
+                      ...prevState,
+                      userName: value,
+                    }));
                   }}
                 />
                 <TextInput
@@ -159,14 +159,14 @@ useEffect(() => {
                   <Text style={styles.btnTitle}>Зарегистрироваться</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.linkText} onPress={() => navigation.navigate("Login")}>
-                  <Text >Уже есть аккаунт?{" "}
-                    <Text>
-                      Войти
-                    </Text>
+                <TouchableOpacity
+                  style={styles.linkText}
+                  onPress={() => navigation.navigate("Login")}
+                >
+                  <Text>
+                    Уже есть аккаунт? <Text>Войти</Text>
                   </Text>
                 </TouchableOpacity>
-
               </View>
             </View>
           </KeyboardAvoidingView>
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
     right: -10,
     bottom: 13,
   },
-  
+
   form: {
     position: "relative",
     alignItems: "center",
@@ -265,17 +265,16 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     justifyContent: "center",
     alignItems: "center",
-  //    ...Platform.select({
-  //     ios: {
-  //       backgroundColor: "transparent",
-  //       borderColor: "#f0f8ff",
-  //     },
-  //     android: {
-  //       backgroundColor: "#4169e1",
-  //       borderColor: "transparent",
-  //     },
-  //   }),
- 
+    //    ...Platform.select({
+    //     ios: {
+    //       backgroundColor: "transparent",
+    //       borderColor: "#f0f8ff",
+    //     },
+    //     android: {
+    //       backgroundColor: "#4169e1",
+    //       borderColor: "transparent",
+    //     },
+    //   }),
   },
   btnTitle: {
     // color: Platform.OS === "ios" ? "#4169e1" : "#f0f8ff",
@@ -296,5 +295,4 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     color: "#1B4371",
   },
-
 });

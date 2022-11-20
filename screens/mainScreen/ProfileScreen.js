@@ -1,63 +1,158 @@
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Image,
+  ImageBackground,
+  SafeAreaView,
+  StatusBar,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 import IconButton from "../../components/Icon";
 import { authSignOutUser } from "../../redux/auth/authOperation";
-
-// import { Camera, CameraType } from 'expo-camera';
+import db from "../../firebase/config";
 
 export default function ProfileScreen() {
   const dispatch = useDispatch();
 
+  const [userPosts, setUserPosts] = useState([]);
+  const { userId } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    getUserPosts();
+  }, []);
+
+  const getUserPosts = async () => {
+    await db
+      .firestore()
+      .collection("posts")
+      .where("userId", "==", userId)
+      .onSnapshot((data) =>
+        setUserPosts(data.docs.map((doc) => ({ ...doc.data() })))
+      );
+  };
+
   const signOut = () => {
     dispatch(authSignOutUser());
+    console.log(authSignOutUser());
   };
 
   return (
     <View style={styles.container}>
-      <View style={styles.innerBox}>
-        <View style={styles.innerBoxTextWrap}>
-          <Text style={styles.innerBoxText}>Создать публикацию</Text>
-        </View>
-        <TouchableOpacity onPress={signOut} style={{ marginTop: 10 }}>
-          <IconButton type="log-out" onPress={signOut}/>
-        </TouchableOpacity>
-      </View>
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        
-      <Text >Profile Screen</Text>
+      <ImageBackground
+        style={styles.bgImage}
+        source={require("../../assets/image/PhotoBG.jpeg")}
+      >
+        <SafeAreaView>
+          <ScrollView>
+            <View style={styles.innerBox}>
+              <View style={styles.header}>
+                <Image />
+                <View style={styles.headerImg}>
+                  <IconButton type="add" />
+                </View>
+              </View>
+              <TouchableOpacity onPress={signOut} style={styles.logOutIcon}>
+                <IconButton type="log-out" onPress={signOut} />
+              </TouchableOpacity>
+              <View style={styles.innerBoxTextWrap}>
+                <Text style={styles.innerBoxText}>Profile</Text>
+              </View>
+              <View>
+                <FlatList
+                  data={userPosts}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={({ item }) => (
+                    <View style={styles.postContainer}>
+                      <Image
+                        source={{ uri: item.photo }}
+                        style={styles.image}
+                      />
+                    </View>
+                  )}
+                />
+              </View>
             </View>
+          </ScrollView>
+        </SafeAreaView>
+      </ImageBackground>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // alignItems: "center",
-    // justifyContent: "center",
+    paddingTop: StatusBar.currentHeight,
+  },
+  bgImage: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "flex-end",
   },
   innerBox: {
-    flexDirection: "row",
-    borderWidth: 1,
-    padding: 11,
-    paddingTop: 55,
-    borderColor: "rgba(0, 0, 0, 0.3)",
-    justifyContent: "space-around",
+    marginTop: 147,
+    position: "relative",
+    alignItems: "center",
+    bottom: 0,
+    backgroundColor: "#fff",
+    borderRadius: 25,
+    paddingTop: 82,
+  },
+  logOutIcon: {
+    position: "absolute",
+    right: "3.5%",
+    marginTop: 10,
   },
   innerBoxText: {
     marginTop: 16,
     fontFamily: "Roboto-Bold",
     fontStyle: "normal",
     fontWeight: "500",
-    fontSize: 17,
-    lineHeight: 22,
+    fontSize: 30,
+    lineHeight: 35,
     color: "#212121",
   },
   innerBoxTextWrap: {
-    flex: 2,
+    fontFamily: "Roboto-Bold",
+    fontStyle: "normal",
+    fontWeight: "500",
+    fontSize: 30,
+    lineHeight: 35,
+    letterSpacing: 0.02,
+    color: "#212121",
+    marginBottom: 32,
+  },
+  postContainer: {
+    marginBottom: 10,
+    justifyContent: "center",
     alignItems: "center",
-    paddingLeft: 30,
+  },
+  image: {
+    width: 375,
+    height: 200,
+    borderRadius: 8,
+  },
+  header: {
+    position: "absolute",
+    top: -60,
+    backgroundColor: "#F6F6F6",
+    borderRadius: 16,
+    width: 120,
+    height: 120,
+  },
+  headerImg: {
+    borderWidth: 1,
+    backgroundColor: "#FFF",
+    padding: 6,
+    borderColor: "#FF6C00",
+    borderRadius: 100,
+    position: "absolute",
+    right: -10,
+    bottom: 13,
   },
 });

@@ -1,10 +1,8 @@
-// import { initializeApp } from "firebase/app";
-// import { getAnalytics } from "firebase/analytics";
-
 import * as firebase from "firebase";
 import 'firebase/auth';
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+import 'firebase/storage';
+import 'firebase/firestore';
+
 const firebaseConfig = {
   apiKey: "AIzaSyAJ79R71Xr8DKwI-Nl7M7WxvR-QSTV4bsw",
   authDomain: "react-native-mobile-app-9657d.firebaseapp.com",
@@ -15,7 +13,5 @@ const firebaseConfig = {
   measurementId: "G-BJ05HHB900"
 };
 
-// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 export default firebase;
-// const analytics = getAnalytics(app);
